@@ -1,4 +1,4 @@
-package com.example.buscapokemon
+package com.example.buscapokemon.presentation.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

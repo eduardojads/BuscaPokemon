@@ -1,25 +1,25 @@
-package com.example.buscapokemon
+package com.example.buscapokemon.presentation.main
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.buscapokemon.data.PokemonRepository
 import com.example.buscapokemon.data.api.RetrofitClient
+import com.example.buscapokemon.domain.model.Pokemon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel : ViewModel() {
     private val repository = PokemonRepository(RetrofitClient.pokemonApi)
-    var pokemonDetails: String = ""
-    var pokemonSprites: List<String> = emptyList()
-    fun getPokemon(id: Int, onResult: (String, List<String>) -> Unit) {
+
+    //programação reativa
+    val pokemonResponse = MutableLiveData<Pokemon>()
+
+    fun getPokemon(id: Int) {
         viewModelScope.launch {
-            val (details, sprites) = repository.getPokemonData(id)
-            withContext(Dispatchers.Main) {
-                pokemonDetails = details
-                pokemonSprites = sprites
-                onResult(details, sprites)
-            }
+            val pokemon = repository.getPokemonData(id)
+            pokemonResponse.value = pokemon
         }
     }
 }
